@@ -83,14 +83,38 @@ public class BinarySearchTree {
 
     private BinarySearchTree findKey(BinarySearchTree currentTree, String wantedKey) {
         if (currentTree!=null){
-            if(Double.parseDouble(currentTree.key)>Double.parseDouble(wantedKey)){
+            int temp=isFirstGreator(currentTree.key,wantedKey);
+            if(temp>0){
                 return findKey(currentTree.left,wantedKey);
-            }else if(Double.parseDouble(currentTree.key)<Double.parseDouble(wantedKey)) {
+            }else if(temp<0) {
                 return findKey(currentTree.right,wantedKey);
             }else {
                 return currentTree;
             }
         }return null;
+    }
+
+    private int isFirstGreator(String first,String second){
+        if(isNumber(first)&&isNumber(second)){//handle the case we have all numbers
+            //if both of the strings can be numbers, then use the default java double.compare
+            Double f=Double.parseDouble(first);
+            Double s=Double.parseDouble(second);
+            return Double.compare(f,s);
+        }else{//if one of the string cannot be a number, then use the default java string compareTo
+            return first.compareTo(second);
+        }
+    }
+
+    //determine if a string can be a double
+    private boolean isNumber(String s) {
+        try {
+            Double.parseDouble(s);
+        } catch(NumberFormatException e) {
+            return false;
+        } catch(NullPointerException e) {
+            return false;
+        }
+        return true;
     }
 
     public BinarySearchTree findMin(){
@@ -154,7 +178,8 @@ public class BinarySearchTree {
 
     private BinarySearchTree addKey(BinarySearchTree current, String wantedkey, Object value) {
         if(current!=null &&current.key!=null){
-            if(Double.parseDouble(current.key)>Double.parseDouble(wantedkey)){
+            int temp=isFirstGreator(current.key,wantedkey);
+            if(temp>0){
                 if(current.left!=null) {
                     current=current.left;
                     current=addKey(current, wantedkey, value);
@@ -163,7 +188,7 @@ public class BinarySearchTree {
                     return current.left;
 
                 }
-            }else if(Double.parseDouble(current.key)<Double.parseDouble(wantedkey)){
+            }else if(temp<0){
                 if(current.right!=null) {
                     current=current.right;
                     current=addKey(current, wantedkey, value);
