@@ -42,23 +42,46 @@ public class testBST {
         bst.printInorder();
         System.out.println("xxxxxxxxxx");
         System.out.println();
+
+        System.out.println("delete 65");
+        bst.delete("65");
+        bst.printInorder();
+        bst.printPreorder();
+        System.out.println("xxxxxxxxxx");
+        System.out.println();
+
+        System.out.println("delete 30");
+        bst.delete("30");
+        bst.printInorder();
+        bst.printPreorder();
+        System.out.println("xxxxxxxxxx");
+        System.out.println();
+
+        System.out.println("delete 75");
         bst.delete("75");
         bst.printInorder();
         bst.printPreorder();
         System.out.println("xxxxxxxxxx");
         System.out.println();
+
+        System.out.println("delete 150");
         bst.delete("150");
         bst.printInorder();
         bst.printPreorder();
         System.out.println("xxxxxxxxxx");
         System.out.println();
+
+        System.out.println("delete 45");
         bst.delete("45");
         bst.printInorder();
         bst.printPreorder();
         System.out.println("xxxxxxxxxx");
         System.out.println();
+
         bst.printInorder();
+        System.out.print("Do mirror image: ");
         bst.mirrorTree().printPreorder();
+        System.out.print("Normal: ");
         bst.printPreorder();
 
 

@@ -16,7 +16,10 @@ public class BinarySearchTree {
         setBST(null,null,null,null,null);
     }
 
-    public BinarySearchTree(Object value,String k,BinarySearchTree p){setBST(value,k,null,null,p);};
+    public BinarySearchTree(Object value,String k,BinarySearchTree p){
+        setBST(value,k,null,null,p);
+        size++;
+    }
 
     public BinarySearchTree(Object data, String key,BinarySearchTree left,BinarySearchTree right,BinarySearchTree parent){
         setBST(data,key,left,right,parent);
@@ -31,11 +34,11 @@ public class BinarySearchTree {
     }
 
     public boolean hasLeft(){
-        return isNull(left);
+        return left!=null;
     }
 
     public boolean hasRight(){
-        return isNull(right);
+        return right!=null;
     }
 
     public boolean isLeaf(){
@@ -47,14 +50,11 @@ public class BinarySearchTree {
     }
 
     public boolean isEmpty(){
-        if(isNull(this)){
-            return false;
-        }
-        return ((!isNull(this)) && size==0);
+        return (size==0);
     }
 
     public boolean isRoot(){
-        return isNull(parent);
+        return parent==null;
     }
 
     public boolean isLeftChild(){
@@ -65,15 +65,8 @@ public class BinarySearchTree {
         return((parent.right).equals(this));
     }
 
-    public boolean hasParent(){return (!isNull(parent));}
+    public boolean hasParent(){return parent!=null;}
 
-    private boolean isNull(BinarySearchTree bst){
-        if (bst==null){
-            return true;
-        }else {
-            return false;
-        }
-    }
 
     public BinarySearchTree findNode(String wantedKey){
         BinarySearchTree current=this;
@@ -152,25 +145,22 @@ public class BinarySearchTree {
 
     public void insert(String key, Object value){
 
-        if(isNull(this)){
-            addRoot(key, value);
-            System.out.println("addRoot done  "+key);//test
-        }else if(isEmpty()){
+        if(isEmpty()){
             setBST(value,key,null,null,null);
-            System.out.println("setBST done  "+key);//test
+            //System.out.println("setBST done  "+key);//test
         }else
         {
             BinarySearchTree bstRoot=this;
             bstRoot=addKey(bstRoot,key,value);
-            System.out.println("addKey done  "+key+" "+bstRoot.parent.key);//test
-            System.out.println("current bst at "+bstRoot.key);//test
-            printInorder();//test
-            printPreorder();//test
+           // System.out.println("addKey done  "+key+" "+bstRoot.parent.key);//test
+           // System.out.println("current bst at "+bstRoot.key);//test
+           // printInorder();//test
+           // printPreorder();//test
             balance(bstRoot);
-            printInorder();//test
-            printPreorder();//test
-            advancedPrint(this);
-            System.out.println("kkkkkkkkkk");
+          //  printInorder();//test
+           // printPreorder();//test
+            //advancedPrint(this);
+          //  System.out.println("kkkkkkkkkk");
         }
 
         size++;
@@ -200,7 +190,7 @@ public class BinarySearchTree {
                 throw new IllegalArgumentException("The key has already existed.");
             }
         }
-        System.out.println("inside addKey "+current.key);
+        //System.out.println("inside addKey "+current.key);
         return current;
     }
 
@@ -221,9 +211,20 @@ public class BinarySearchTree {
         if(size ==0){
             throw new IllegalArgumentException("the tree is empty");
         }
+
+
         size--;
         BinarySearchTree bst=findNode(key);
-        System.out.println(key+"find key "+bst.key);
+
+        if(size()==1 && bst!=null){
+            setBST(null,null,null,null,null);
+            size=0;
+            return;
+        }
+        //deal with the case the tree just have one element
+        //avoid errors
+
+        System.out.println(key+" find key "+bst.key);
         BinarySearchTree current;
         if (bst.left==null && bst.right==null){
             current=bst.parent;
@@ -280,8 +281,12 @@ public class BinarySearchTree {
                 bst.key=successorBst.key;
                 bst.data=successorBst.data;
                 //swap the key and data, make a fake switch
-                bst.right.parent=bst;
-                bst.left.parent=bst;
+                if(bst.right!=null) {
+                    bst.right.parent = bst;
+                }
+                if(bst.left!=null) {
+                    bst.left.parent = bst;
+                }
                 //make the kids back to bst
             }
         }
@@ -378,12 +383,14 @@ public class BinarySearchTree {
      */
     private void balance(BinarySearchTree bst){
         int balanceFactor =0;
-        boolean isOut = isOutside(bst);
-        while(bst !=null && (balanceFactor!=2 || balanceFactor!=-2)){
-            balanceFactor=bst.balanceFactor();
-            System.out.println("bst is "+bst.data+"  balanced");
-            doRotation(isOut,balanceFactor,bst);
-            bst=bst.parent;
+        if(bst!=null) {
+            boolean isOut = isOutside(bst);
+            while (bst != null) {
+                balanceFactor = bst.balanceFactor();
+                //System.out.println("bst is "+bst.data+"  balanced");
+                doRotation(isOut, balanceFactor, bst);
+                bst = bst.parent;
+            }
         }
     }
 
@@ -570,6 +577,8 @@ public class BinarySearchTree {
             doInorder(binarySearchTree.right);
         }
     }
+
+
 
     public void printPreorder(){
         System.out.print("Print preorder:");
